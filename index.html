@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>SKY LAB Çarkıfelek</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="header">
+      <img src="skylab-logo-pink.png" alt="Skylab Logo" />
+      <h1>SKY LAB ÇARKIFELEK</h1>
+    </div>
+    
+    <div class="container">
+      <div class="spinBtn">
+        <img src="skylab-siyah-logo.png" alt="Spin" />
+      </div>
+      <div class="wheel" id="wheel"></div>
+    </div>
+
+    <!-- Modal -->
+    <div id="resultModal" class="modal">
+      <div class="modal-content">
+        <button id="retryBtn" class="retryBtn">YENİDEN ÇEVİR</button>
+      </div>
+    </div>
+
+    <script src="wheelData.js"></script>
+    <script>
+      let wheel = document.querySelector(".wheel");
+      let spinBtn = document.querySelector(".spinBtn");
+      let retryBtn = document.querySelector("#retryBtn");
+      let resultModal = document.querySelector("#resultModal");
+      let isSpinning = false; // Çarkın dönüp dönmediğini kontrol etmek için
+
+      // Çarktaki seçenekleri çarka ekleyelim
+      function populateWheel() {
+        let wheelData = getWheelData();
+        let segmentAngle = 360 / wheelData.length;
+        wheelData.forEach((item, index) => {
+          const numberDiv = document.createElement("div");
+          numberDiv.classList.add("number");
+          numberDiv.style.setProperty("--i", index + 1);
+          numberDiv.style.setProperty("--clr", item.color);
+          numberDiv.style.transform = `rotate(${index * segmentAngle}deg)`;
+          numberDiv.innerHTML = `<span>${item.value}</span>`;
+          wheel.appendChild(numberDiv);
+        });
+      }
+
+      // Belirli bir olasılık değerine göre rastgele segment seçme
+      function getRandomSegment() {
+        let wheelData = getWheelData();
+        let totalPercent = wheelData.reduce((total, item) => total + item.percent, 0);
+        let random = Math.random() * totalPercent;
+
+        let cumulativePercent = 0;
+        for (let i = 0; i < wheelData.length; i++) {
+            cumulativePercent += wheelData[i].percent;
+            if (random <= cumulativePercent) {
+                return i; // Dönüşün hangi segmente denk geldiğini belirler
+            }
+        }
+        return 0;
+      }
+
+      // Çarkı çevirme fonksiyonu
+      function spinWheel() {
+        if (isSpinning) return; // Çark zaten dönüyorsa işlemi durdur
+        isSpinning = true;
+
+        let winningSegmentIndex = getRandomSegment();
+        let wheelData = getWheelData();
+        let segmentAngle = 360 / wheelData.length;
+        let randomAngle = Math.random() * segmentAngle; // Segment açısına göre rastgele bir açı
+
+        let finalAngle = (3 * 360) + (winningSegmentIndex * segmentAngle) + randomAngle; // En az 3 tam tur + rastgele açı
+
+        wheel.style.transition = "transform 4s ease-out";
+        wheel.style.transform = `rotate(${finalAngle}deg)`;
+
+        setTimeout(() => {
+            isSpinning = false;
+            resultModal.style.display = "flex"; // Modalı göster
+        }, 4000); // 4 saniye sonra çark duracak
+      }
+
+      spinBtn.addEventListener("click", spinWheel);
+      retryBtn.addEventListener("click", () => location.reload()); // Sayfayı yenile
+
+      // Çarkı başlat
+      populateWheel();
+    </script>
+  </body>
+</html>

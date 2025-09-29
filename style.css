@@ -1,0 +1,154 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #333;
+    background-image: url(skyback.png);
+    flex-direction: column;
+    gap: 4.5rem;
+    font-family: 'Bebas Neue', sans-serif;
+}
+
+.header{
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.header img{
+    width: 75px;
+    height: 75px;
+}
+
+h1{
+    color: #EADAFF;
+    font-size: 3rem;
+    text-align: center;
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 10px;
+}
+
+.container {
+    position: relative;
+    width: 500px;
+    height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container .spinBtn {
+    position: absolute;
+    width: 75px;
+    height: 75px;
+    background: #000;
+    border-radius: 50%;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: #333;
+    border: 4px solid #000000;
+    cursor: pointer;
+    user-select: none;
+}
+
+.container .spinBtn::before {
+    content: '';
+    position: absolute;
+    top: -28px;
+    width: 20px;
+    height: 30px;
+    background: #000000;
+    clip-path: polygon(50% 0, 15% 100%, 85% 100%);
+}
+
+.container .spinBtn img {
+    width: 75px;
+    height: 75px;
+}
+
+.container .wheel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #333;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 
+        0 0 0 3px #333,
+        0 0 50px 25px rgba(234, 218, 255, 1); /* Glow efekti */
+    transition: transform 4s ease-in-out;
+}
+
+.container .wheel .number {
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    background: var(--clr);
+    transform-origin: bottom right;
+    transform: rotate(calc(72deg * var(--i)));
+    clip-path: polygon(0 0, 82% 0, 100% 100%, 0 86%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+    cursor: pointer;
+}
+
+.container .wheel .number span {
+    position: relative;
+    transform: rotate(-45deg); /* Metni düzleştirmek için */
+    font-size: 1.25em;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 3px 5px 2px rgba(0,0,0,0.15);
+}
+
+/* Modal Stilleri */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    margin-top: 40vh;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    position: relative;
+}
+
+/* YENİDEN ÇEVİR butonu stili */
+.retryBtn {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
