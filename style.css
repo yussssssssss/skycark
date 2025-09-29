@@ -136,10 +136,18 @@ h1{
 .modal-content {
     margin-top: 40vh;
     background-color: white;
-    padding: 20px;
+    padding: 20px 40px;
     border-radius: 10px;
     text-align: center;
     position: relative;
+}
+
+#prizeResult {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 20px; /* Butonla arasına boşluk koyar */
+    font-family: 'Bebas Neue', sans-serif;
+    line-height: 1;
 }
 
 /* YENİDEN ÇEVİR butonu stili */

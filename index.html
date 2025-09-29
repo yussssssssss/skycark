@@ -27,6 +27,7 @@
     <!-- Modal -->
     <div id="resultModal" class="modal">
       <div class="modal-content">
+         <h2 id="prizeResult"></h2> 
         <button id="retryBtn" class="retryBtn">YENİDEN ÇEVİR</button>
       </div>
     </div>
@@ -37,6 +38,7 @@
       let spinBtn = document.querySelector(".spinBtn");
       let retryBtn = document.querySelector("#retryBtn");
       let resultModal = document.querySelector("#resultModal");
+      let prizeResult = document.querySelector("#prizeResult");
       let isSpinning = false; // Çarkın dönüp dönmediğini kontrol etmek için
 
       // Çarktaki seçenekleri çarka ekleyelim
@@ -71,24 +73,30 @@
       }
 
       // Çarkı çevirme fonksiyonu
-      function spinWheel() {
-        if (isSpinning) return; // Çark zaten dönüyorsa işlemi durdur
+       function spinWheel() {
+        if (isSpinning) return;
         isSpinning = true;
 
         let winningSegmentIndex = getRandomSegment();
         let wheelData = getWheelData();
-        let segmentAngle = 360 / wheelData.length;
-        let randomAngle = Math.random() * segmentAngle; // Segment açısına göre rastgele bir açı
+        let winningPrize = wheelData[winningSegmentIndex];
 
-        let finalAngle = (3 * 360) + (winningSegmentIndex * segmentAngle) + randomAngle; // En az 3 tam tur + rastgele açı
+        let segmentAngle = 360 / wheelData.length; // Her bir dilimin açısı (60 derece)
+        let winningSegmentCenter = (winningSegmentIndex * segmentAngle) + (segmentAngle / 2);
+        
+        let finalAngle = (4 * 360) - winningSegmentCenter + 90;
 
-        wheel.style.transition = "transform 4s ease-out";
+        let randomOffset = (Math.random() - 0.5) * (segmentAngle * 0.5);
+        finalAngle += randomOffset;
+
+        wheel.style.transition = "transform 5s ease-out"; // Süreyi 5 saniyeye çıkardım, daha güzel duruyor.
         wheel.style.transform = `rotate(${finalAngle}deg)`;
 
         setTimeout(() => {
             isSpinning = false;
-            resultModal.style.display = "flex"; // Modalı göster
-        }, 4000); // 4 saniye sonra çark duracak
+            prizeResult.innerHTML = `Tebrikler!<br><strong>${winningPrize.value}</strong> kazandınız!`;
+            resultModal.style.display = "flex";
+        }, 5000); // Süreyi 5 saniye yaptığımız için bunu da 5000 yapmalıyız.
       }
 
       spinBtn.addEventListener("click", spinWheel);
